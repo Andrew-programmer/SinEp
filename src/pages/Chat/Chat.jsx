@@ -1,6 +1,8 @@
 import {ChatUser} from "../../components/Chat/ChatUser/ChatUser";
 import {SearchBar} from "../../components/Chat/SearchBar/SearchBar";
 import Divider from "@mui/material/Divider";
+import {useNavigate} from "react-router";
+import {CHAT, CHAT_ROUTE} from "../../uutils/consts";
 
 const chatUsers = [
     {
@@ -66,6 +68,12 @@ const chatUsers = [
 ]
 
 export const Chat = () => {
+    const navigate = useNavigate();
+
+    const onChatClick = (id = 1) => {
+        navigate(CHAT_ROUTE + `/${id}`)
+    }
+
     return (
         <section className={'pt-12 pb-14 flex items-center justify-around bg-black flex-wrap'}>
             <SearchBar
@@ -76,7 +84,7 @@ export const Chat = () => {
                     chatUsers.map(({name, message, status}) => {
                         return <>
                             <Divider variant={'middle'}/>
-                            <ChatUser name={name} status={status} message={message}/>
+                            <ChatUser name={name} status={status} message={message} navigateToChat={() => onChatClick()}/>
                         </>
                     })
                 }

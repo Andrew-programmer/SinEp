@@ -31,9 +31,9 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
         },
     },
 }));
-export const ChatUser = ({name, message, status, img = ''}) => {
+export const ChatUser = ({name, message, status, navigateToChat, img = ''}) => {
     return (
-        <div className={'flex flex-row items-center my-2 justify-between w-full'}>
+        <div className={'flex flex-row items-center my-2 justify-between w-full'} onClick={navigateToChat}>
             <div className={'flex flex-row items-center'}>
                 {
                     status ?

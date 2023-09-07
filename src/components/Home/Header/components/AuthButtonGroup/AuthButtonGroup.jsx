@@ -14,7 +14,7 @@ export const AuthButtonGroup = ({handleSearchClick, avatar}) => {
     const [checked, setChecked] = useState(false);
     const containerRef = useRef(null);
 
-    const handleChange = () => {
+    const handleChange =  () => {
         setChecked((prev) => !prev);
         setSearch('');
     };

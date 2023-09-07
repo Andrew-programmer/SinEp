@@ -11,7 +11,8 @@ class PostController {
             creatorId,
             isNSFW,
             description,
-            title
+            title,
+            place
         } = req.body;
 
 
@@ -27,6 +28,7 @@ class PostController {
                 creator_type,
                 isNSFW,
                 title,
+                place,
                 description,
                 likes: [],
                 dislikes: [],

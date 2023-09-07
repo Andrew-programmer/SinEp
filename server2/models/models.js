@@ -39,6 +39,11 @@ const Group = sequelize.define('group', {
 
 const GroupSettings = sequelize.define('group_settings', {
     id: {type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true},
+    isNSFWPostable: {type: DataTypes.BOOLEAN, default: false},
+    allPost: {type: DataTypes.BOOLEAN, default: true},
+    rolesPost: {type: DataTypes.ARRAY(DataTypes.INTEGER), default: [], required: false},
+    banDuration: {type: DataTypes.INTEGER},
+    muteDuration: {type: DataTypes.INTEGER}
 })
 
 //
@@ -71,7 +76,8 @@ const Post = sequelize.define('post', {
     creator_type: {type: DataTypes.STRING, required: true, default: 'user'},
     creatorId: {type: DataTypes.INTEGER, required: true},
     likes: {type: DataTypes.ARRAY(DataTypes.INTEGER), default: []},
-    dislikes: {type: DataTypes.ARRAY(DataTypes.INTEGER), default: []}
+    dislikes: {type: DataTypes.ARRAY(DataTypes.INTEGER), default: []},
+    place: {type: DataTypes.STRING, required: false, default: ''}
 })
 
 const PostThread = sequelize.define('post_thread', {
@@ -103,6 +109,23 @@ const Inbox = sequelize.define('inbox', {
     userId: {type: DataTypes.INTEGER}
 })
 
+//
+
+const Chat = sequelize.define('chat', {
+    id: {type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true},
+    u1Id: {type: DataTypes.INTEGER},
+    u2Id: {type: DataTypes.INTEGER}
+})
+
+const Message = sequelize.define('message', {
+    id: {type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true},
+    chatId: {type: DataTypes.INTEGER, notNull: true},
+    userId: {type: DataTypes.INTEGER, notNull: true},
+    date: {type: DataTypes.INTEGER, notNull: true},
+    content: {type: DataTypes.STRING},
+    isRedacted: {type: DataTypes.BOOLEAN, default: false}
+})
+
 
 Gender.hasMany(User);
 User.belongsTo(Gender);
@@ -132,7 +155,10 @@ Post.hasMany(UserAction);
 UserAction.belongsTo(Post);
 
 User.hasMany(UserAction);
-UserAction.belongsTo(User);
+UserAction.belongsTo(User)
+
+Chat.hasMany(Message);
+Message.belongsTo(Chat);
 
 module.exports = {
     User,
@@ -146,5 +172,7 @@ module.exports = {
     PostThread,
     PostComment,
     UserAction,
-    Inbox
+    Inbox,
+    Chat,
+    Message
 }

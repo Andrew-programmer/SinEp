@@ -1,25 +1,61 @@
 import {HeaderGroup} from "../../components/Add/HeaderGroup/HeaderGroup";
 import {FooterButtonGroup} from "../../components/Add/FooterButtonGroup/FooterButtonGroup";
-import {useContext, useState} from "react";
+import {useContext, useRef, useState} from "react";
 import {ChoosePostPlace} from "../../components/Add/ChoosePostPlace/ChoosePostPlace";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
+
+
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import './Add.css';
 
 export const Add = observer(() => {
     const {user} = useContext(Context);
     const [page, setPage] = useState(0);
     const [loadedImg, setLoadedImg] = useState('');
+
+    const inputElement = useRef();
+
+    const [value, setValue] = useState('');
+
+    const formats = [
+        'bold', 'italic', 'underline', 'strike',
+        'link',
+    ];
+
+    const modules = {
+        toolbar: [
+            ['bold', 'italic', 'underline','strike'],
+            ['link'],
+            ['clean']
+        ],
+    };
+
+
     const [data, setData] = useState({
         description: '',
         isNSFW: false,
         photo: '',
         creator_type: 'user',
-        creatorId: user.getUser().id
+        creatorId: user.getUser().id,
+        place: ''
     });
+
+    const changeDescription = (e) => {
+        setValue(e);
+        inputElement.current.innerHTML = e;
+        setData(prevState => {
+            return {
+                ...prevState,
+                description: e
+            }
+        })
+    }
 
 
     const handleDataChange = (e, key) => {
-        const value = key !== 'photo' ? e.target.value: e.files[0];
+        const value = key !== 'photo' ? e.target.value : e.files[0];
         setData(prevState => {
             return {
                 ...prevState,
@@ -35,20 +71,22 @@ export const Add = observer(() => {
             {
                 page === 0 ?
                     <>
-                        <div className={'flex flex-col'}>
-                            <HeaderGroup setPage={setPage} value={data.title} setData={handleDataChange}/>
+                        <div className={'flex flex-col w-full'}>
+                            <HeaderGroup setPage={setPage} titleValue={data.title} setData={handleDataChange}/>
                             <main>
-                            <textarea placeholder={'BODY'}
-                                      className={'outline-0 border-0 h-full w-full resize-none ' +
-                                          'bg-transparent text-white p-4'}
-                                      onChange={e => handleDataChange(e, 'description')}
-                                      value={data.description}
-                            ></textarea>
-                                <img src={loadedImg} alt={'Your picture/video'} className={'h-[10rem] w-full'}/>
+                                <div ref={inputElement} className={'text-white w-full break-words max-h-[18rem] overflow-auto px-3'}>
+                                    {/*    Value*/}
+                                </div>
                             </main>
                         </div>
+                        <img src={!loadedImg ? '#' : loadedImg} alt={'Your picture/video'}
+                             className={'h-[10rem] w-full'}/>
 
-                        <FooterButtonGroup setLoadedImg={setLoadedImg} handleDataChange={handleDataChange}/>
+
+                        <section className={'max-h-[11rem] w-full'}>
+                            <ReactQuill theme={'snow'} value={value} onChange={changeDescription} formats={formats} modules={modules}/>
+                            <FooterButtonGroup setLoadedImg={setLoadedImg} handleDataChange={handleDataChange}/>
+                        </section>
                     </>
                     :
                     <>

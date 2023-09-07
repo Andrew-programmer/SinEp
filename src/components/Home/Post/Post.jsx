@@ -17,17 +17,27 @@ import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import {Button, CardActionArea} from "@mui/material";
 import {SwipeableEdgeDrawer} from "../SwipeableEdgeDrawer/SwipeableEdgeDrawer";
 import {useState} from "react";
+import {useNavigate} from "react-router";
 
-export default function Post({photoSrc, isProfile = false}) {
+export default function Post({photoSrc, isProfile = false, isPostView = false}) {
     const [open, setOpen] = React.useState(false);
     const [full, setFull] = useState(false);
+    const [isComments, setIsComments] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleFull = () => {
         setFull(prevState => !prevState);
     }
 
-    const toggleDrawer = (newOpen) => () => {
+    const toggleDrawer = (newOpen, isComments = false) => () => {
         setOpen(newOpen);
+        setIsComments(isComments);
+    };
+
+
+    const handlePostClick = (event) => {
+        navigate('/post/' + 1);
     };
 
     const setMinHeight = () => {
@@ -40,7 +50,8 @@ export default function Post({photoSrc, isProfile = false}) {
         }
     }
 
-    const onOpen = toggleDrawer(true);
+    const onCommentsOpen = toggleDrawer(true, true);
+    const onShareOpen = toggleDrawer(true);
 
 
     return (
@@ -54,7 +65,7 @@ export default function Post({photoSrc, isProfile = false}) {
                     transition: '0.2s ease-in',
                     '@media screen and (min-width: 580px)': {
                         '&': {
-                                minHeight: '26rem'
+                            minHeight: '26rem'
                         }
                     }
                 }}
@@ -71,9 +82,9 @@ export default function Post({photoSrc, isProfile = false}) {
                         </IconButton>
                     }
                     title="Shrimp and Chorizo Paella"
-                    subheader="September 14, 2016"
+                    subheader="Katowice, Poland • 14/01/2023"
                 />
-                <CardActionArea onClick={handleFull}>
+                <CardActionArea onClick={isProfile ? handleFull : handlePostClick}>
                     <CardMedia
                         component="img"
                         height="194"
@@ -98,18 +109,33 @@ export default function Post({photoSrc, isProfile = false}) {
                              }}
                 >
                     <VoteButtonGroup/>
-                    <Button startIcon={<ChatBubbleOutlineRoundedIcon/>}
-                            onClick={onOpen}
-                            sx={{
-                                opacity: 0.6,
-                                color: 'white',
-                                fontSize: '0.75rem'
-                            }}
-                    >
-                        31
-                    </Button>
+                    {
+                        isPostView ?
+                            <Button startIcon={<ChatBubbleOutlineRoundedIcon/>}
+                                    onClick={() => {}}
+                                    sx={{
+                                        opacity: 0.6,
+                                        color: 'white',
+                                        fontSize: '0.75rem'
+                                    }}
+                            >
+                                Add
+                            </Button>
+                            :
+                            <Button startIcon={<ChatBubbleOutlineRoundedIcon/>}
+                                    onClick={onCommentsOpen}
+                                    sx={{
+                                        opacity: 0.6,
+                                        color: 'white',
+                                        fontSize: '0.75rem'
+                                    }}
+                            >
+                                31
+                            </Button>
+                    }
+
                     <Button startIcon={<ShareOutlinedIcon/>}
-                            onClick={onOpen}
+                            onClick={onShareOpen}
                             sx={{
                                 opacity: 0.6,
                                 color: 'white',
@@ -120,7 +146,7 @@ export default function Post({photoSrc, isProfile = false}) {
                     </Button>
                 </CardActions>
             </Card>
-            <SwipeableEdgeDrawer toggleDrawer={toggleDrawer} open={open}/>
+            <SwipeableEdgeDrawer toggleDrawer={toggleDrawer} open={open} isComments={isComments}/>
         </>
     );
 }

@@ -1,9 +1,9 @@
 import {
-    ADD_ROUTE,
+    ADD_ROUTE, CHAT,
     CHAT_ROUTE, CREATE_COMMUNITY_ROUTE,
     DISCOVER_ROUTE, GROUP,
     HOME_ROUTE, INBOX_ROUTE,
-    LOGIN_ROUTE,
+    LOGIN_ROUTE, POST_PAGE,
     PROFILE_ROUTE,
     REGISTER_ROUTE,
     SETTINGS_ROUTE
@@ -19,6 +19,8 @@ import {Inbox} from "../pages/Inbox/Inbox";
 import {Add} from "../pages/Add/Add";
 import {CreateCommunity} from "../pages/CreateCommunity/CreateCommunity";
 import {Group} from "../pages/Group/Group";
+import {PostPage} from "../pages/Post/Post";
+import {ChatPage} from "../pages/ChatPage/ChatPage";
 
 export const publicRoutes = [
     {
@@ -64,4 +66,12 @@ export const privateRoutes = [
         path: GROUP,
         Component: Group
     },
+    {
+        path: POST_PAGE,
+        Component: PostPage
+    },
+    {
+        path: CHAT,
+        Component: ChatPage
+    }
 ]

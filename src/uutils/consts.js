@@ -19,3 +19,7 @@ export const ADD_ROUTE = '/add';
 export const CREATE_COMMUNITY_ROUTE = '/create_community'
 
 export const GROUP = '/group';
+
+export const POST_PAGE = '/post/:id';
+
+export const CHAT = '/chat/:id';
